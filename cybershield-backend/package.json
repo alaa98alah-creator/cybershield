@@ -1,0 +1,21 @@
+{
+  "name": "cybershield-backend",
+  "version": "1.0.0",
+  "description": "CyberShield Backend - Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 execute cybershield-db --file=migrations/0001_init.sql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hono": "^4.12.18"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260511.1",
+    "wrangler": "^4.90.0"
+  }
+}

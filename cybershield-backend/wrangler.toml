@@ -1,0 +1,20 @@
+name = "cybershield-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cybershield-db"
+database_id = "ca3a9f7c-3546-4e30-b16e-e619f87b92e0"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "d046a1bcef8d427eb6d39759d435be5a"
+
+
+[observability]
+enabled = true
