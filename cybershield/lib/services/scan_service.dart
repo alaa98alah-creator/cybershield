@@ -42,6 +42,24 @@ class ScanService {
     }
   }
 
+  Future<String> scanFileBytes(
+    List<int> bytes,
+    String fileName,
+  ) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(bytes, filename: fileName),
+      });
+      final response = await _network.multipartPost(
+        ApiConstants.scanFile,
+        formData: formData,
+      );
+      return response.data['scan_id'] as String;
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
   Future<ScanResultResponse> getScanResult(String scanId) async {
     try {
       final response = await _network.get('${ApiConstants.scanResult}/$scanId');

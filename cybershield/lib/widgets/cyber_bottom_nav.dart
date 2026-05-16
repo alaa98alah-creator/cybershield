@@ -53,13 +53,7 @@ class CyberBottomNav extends StatelessWidget {
                     icon: Icons.person,
                     label: 'الملف الشخصي',
                     isActive: currentIndex == 2,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('الملف الشخصي قيد التطوير'),
-                        ),
-                      );
-                    },
+                    onTap: () => context.go('/profile'),
                   ),
                 ],
               ),

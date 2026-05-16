@@ -104,7 +104,7 @@ class _StatusCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
-        border: Border(right: BorderSide(color: statusColor, width: 4)),
+        border: Border.all(color: statusColor.withValues(alpha: 0.4), width: 1.5),
       ),
       child: Row(
         children: [

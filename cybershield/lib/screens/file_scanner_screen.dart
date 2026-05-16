@@ -20,12 +20,19 @@ class _FileScannerScreenState extends ConsumerState<FileScannerScreen> {
   final bool _isDragging = false;
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.single.path != null) {
-      final file = result.files.single;
+    final result = await FilePicker.platform.pickFiles(withData: true);
+    if (result == null || result.files.isEmpty) return;
+
+    final file = result.files.single;
+
+    if (file.path != null) {
       ref.read(scanProvider.notifier).scanFile(file.path!, file.name);
-      if (mounted) context.push('/analyzing');
+    } else if (file.bytes != null) {
+      ref.read(scanProvider.notifier).scanFileBytes(file.bytes!, file.name);
+    } else {
+      return;
     }
+    if (mounted) context.push('/analyzing');
   }
 
   @override
@@ -127,8 +134,9 @@ class _FileScannerScreenState extends ConsumerState<FileScannerScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(12),
-                      border: const Border(
-                        right: BorderSide(color: AppColors.primary, width: 4),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        width: 1.5,
                       ),
                     ),
                     child: Column(

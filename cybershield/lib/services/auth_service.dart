@@ -25,6 +25,7 @@ class AuthService {
       final authResponse = AuthResponse.fromJson(response.data);
       await _tokenStorage.saveToken(authResponse.token);
       await _tokenStorage.saveUserId(authResponse.userId);
+      await _tokenStorage.saveEmail(email);
       return authResponse;
     } on DioException catch (_) {
       rethrow;
@@ -63,6 +64,7 @@ class AuthService {
       final authResponse = AuthResponse.fromJson(response.data);
       await _tokenStorage.saveToken(authResponse.token);
       await _tokenStorage.saveUserId(authResponse.userId);
+      await _tokenStorage.saveEmail(email);
       return authResponse;
     } on DioException catch (e) {
       print('🔴 DIO ERROR: ${e.response?.statusCode} ${e.response?.data} ${e.message}');

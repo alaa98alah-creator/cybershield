@@ -1,3 +1,4 @@
+import 'package:cybershield/core/constants/app_constants.dart';
 import 'package:cybershield/models/ai_analysis_model.dart';
 import 'package:cybershield/models/scan_model.dart';
 import 'package:cybershield/models/vt_result_model.dart';
@@ -98,29 +99,83 @@ class ScanNotifier extends StateNotifier<ScanState> {
     }
   }
 
-  Future<void> _pollResults(String scanId) async {
-    final result = await _scanService.pollScanResult(scanId);
-    if (result != null) {
-      final scan = ScanModel.fromJson(result.scan);
-      final vtResult = result.vtResult != null
-          ? VtResultModel.fromJson(result.vtResult!)
-          : null;
-      final aiAnalysis = result.aiAnalysis != null
-          ? AiAnalysisModel.fromJson(result.aiAnalysis!)
-          : null;
+  Future<void> scanFileBytes(List<int> bytes, String fileName) async {
+    state = state.copyWith(uiState: ScanUiState.scanning, progress: 0.1);
+    try {
+      final scanId = await _scanService.scanFileBytes(bytes, fileName);
       state = state.copyWith(
-        uiState: ScanUiState.completed,
-        scan: scan,
-        vtResult: vtResult,
-        aiAnalysis: aiAnalysis,
-        progress: 1.0,
+        scanId: scanId,
+        uiState: ScanUiState.polling,
+        progress: 0.3,
       );
-    } else {
+      await _pollResults(scanId);
+    } on DioException catch (e) {
       state = state.copyWith(
         uiState: ScanUiState.error,
-        error: 'انتهت مهلة الانتظار',
+        error: e.response?.data?['message'] as String? ?? 'فشل فحص الملف',
+      );
+    } catch (e) {
+      state = state.copyWith(
+        uiState: ScanUiState.error,
+        error: 'حدث خطأ غير متوقع',
       );
     }
+  }
+
+  Future<void> _pollResults(String scanId) async {
+    final startTime = DateTime.now();
+    int attempt = 0;
+
+    while (DateTime.now().difference(startTime) <
+        AppConstants.scanPollTimeout) {
+      attempt++;
+      try {
+        final result = await _scanService.getScanResult(scanId);
+        final scan = ScanModel.fromJson(result.scan);
+
+        if (scan.status == ScanStatus.completed) {
+          final vtResult = result.vtResult != null
+              ? VtResultModel.fromJson(result.vtResult!)
+              : null;
+          final aiAnalysis = result.aiAnalysis != null
+              ? AiAnalysisModel.fromJson(result.aiAnalysis!)
+              : null;
+          state = state.copyWith(
+            uiState: ScanUiState.completed,
+            scan: scan,
+            vtResult: vtResult,
+            aiAnalysis: aiAnalysis,
+            progress: 1.0,
+          );
+          return;
+        }
+
+        if (scan.status == ScanStatus.failed) {
+          state = state.copyWith(
+            uiState: ScanUiState.error,
+            scan: scan,
+            error: 'فشل الفحص',
+          );
+          return;
+        }
+
+        final newProgress = (0.3 + attempt * 0.05).clamp(0.3, 0.9);
+        state = state.copyWith(progress: newProgress);
+
+        await Future.delayed(AppConstants.scanPollInterval);
+      } on DioException catch (e) {
+        state = state.copyWith(
+          uiState: ScanUiState.error,
+          error: e.response?.data?['message'] as String? ?? 'فشل جلب النتائج',
+        );
+        return;
+      }
+    }
+
+    state = state.copyWith(
+      uiState: ScanUiState.error,
+      error: 'انتهت مهلة الانتظار',
+    );
   }
 
   void reset() {

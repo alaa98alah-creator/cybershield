@@ -4,6 +4,7 @@ import 'package:cybershield/screens/file_scanner_screen.dart';
 import 'package:cybershield/screens/history_screen.dart';
 import 'package:cybershield/screens/home_screen.dart';
 import 'package:cybershield/screens/link_scanner_screen.dart';
+import 'package:cybershield/screens/profile_screen.dart';
 import 'package:cybershield/screens/register_screen.dart';
 import 'package:cybershield/screens/security_report_screen.dart';
 import 'package:cybershield/screens/splash_screen.dart';
@@ -67,6 +68,10 @@ class AppRouter {
       GoRoute(
         path: '/history',
         builder: (context, state) => const HistoryScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

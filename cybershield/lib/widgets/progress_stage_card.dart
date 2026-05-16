@@ -40,9 +40,9 @@ class ProgressStageCard extends StatelessWidget {
               : AppColors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(12),
           border: isActive
-              ? Border(right: BorderSide(color: accentColor, width: 4))
+              ? Border.all(color: accentColor, width: 1.5)
               : isCompleted
-              ? Border(right: BorderSide(color: accentColor, width: 4))
+              ? Border.all(color: accentColor.withValues(alpha: 0.5), width: 1.5)
               : Border.all(color: AppColors.outlineVariant),
         ),
         child: Row(

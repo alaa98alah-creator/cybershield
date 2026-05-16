@@ -8,6 +8,7 @@ class TokenStorage {
   static const _storage = FlutterSecureStorage();
   static const _tokenKey = 'auth_token';
   static const _userIdKey = 'user_id';
+  static const _emailKey = 'user_email';
 
   Future<void> saveToken(String token) async {
     await _storage.write(key: _tokenKey, value: token);
@@ -25,6 +26,14 @@ class TokenStorage {
     return await _storage.read(key: _userIdKey);
   }
 
+  Future<void> saveEmail(String email) async {
+    await _storage.write(key: _emailKey, value: email);
+  }
+
+  Future<String?> getEmail() async {
+    return await _storage.read(key: _emailKey);
+  }
+
   Future<bool> hasToken() async {
     final token = await getToken();
     return token != null && token.isNotEmpty;
@@ -33,5 +42,6 @@ class TokenStorage {
   Future<void> clearAll() async {
     await _storage.delete(key: _tokenKey);
     await _storage.delete(key: _userIdKey);
+    await _storage.delete(key: _emailKey);
   }
 }

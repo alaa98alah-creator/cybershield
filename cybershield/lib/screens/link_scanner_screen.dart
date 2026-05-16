@@ -181,8 +181,9 @@ class _LinkScannerScreenState extends ConsumerState<LinkScannerScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(12),
-                      border: const Border(
-                        right: BorderSide(color: AppColors.primary, width: 4),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        width: 1.5,
                       ),
                     ),
                     child: Row(

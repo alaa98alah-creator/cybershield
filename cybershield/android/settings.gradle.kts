@@ -14,6 +14,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url = uri("https://edgedl.me.gvt1.com/android/maven2") }
     }
 }
 
