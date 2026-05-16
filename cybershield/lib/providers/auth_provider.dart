@@ -43,12 +43,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } on DioException catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
-        error: e.response?.data?['message'] as String? ?? 'فشل تسجيل الدخول',
+        error: e.response?.data?['error'] as String? ??
+            e.response?.data?['message'] as String? ??
+            'فشل تسجيل الدخول',
       );
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
-        error: 'حدث خطأ غير متوقع',
+        error: e.toString(),
       );
     }
   }
@@ -61,7 +63,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         lastName: data['last_name'] as String,
         username: data['username'] as String,
         email: data['email'] as String,
-        phoneNumber: data['phone_number'] as String,
+        phoneNumber: data['phone'] as String,
         gender: data['gender'] as String,
         dateOfBirth: data['date_of_birth'] as String,
         residence: data['residence'] as String,
@@ -69,14 +71,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       state = state.copyWith(status: AuthStatus.authenticated);
     } on DioException catch (e) {
+      print('🔴 AUTH PROVIDER DIO ERROR: ${e.response?.statusCode} ${e.response?.data}');
       state = state.copyWith(
         status: AuthStatus.error,
-        error: e.response?.data?['message'] as String? ?? 'فشل إنشاء الحساب',
+        error: e.response?.data?['error'] as String? ??
+            e.response?.data?['message'] as String? ??
+            e.message ??
+            'فشل إنشاء الحساب',
       );
     } catch (e) {
+      print('🔴 AUTH PROVIDER CATCH ERROR: $e');
       state = state.copyWith(
         status: AuthStatus.error,
-        error: 'حدث خطأ غير متوقع',
+        error: e.toString(),
       );
     }
   }

@@ -54,15 +54,21 @@ class AuthService {
         residence: residence,
         password: password,
       );
+      print('🔴 REGISTER REQUEST: ${request.toJson()}');
       final response = await _network.post(
         ApiConstants.register,
         data: request.toJson(),
       );
+      print('🟢 REGISTER RESPONSE: ${response.statusCode} ${response.data}');
       final authResponse = AuthResponse.fromJson(response.data);
       await _tokenStorage.saveToken(authResponse.token);
       await _tokenStorage.saveUserId(authResponse.userId);
       return authResponse;
-    } on DioException catch (_) {
+    } on DioException catch (e) {
+      print('🔴 DIO ERROR: ${e.response?.statusCode} ${e.response?.data} ${e.message}');
+      rethrow;
+    } catch (e, stack) {
+      print('🔴 CATCH ERROR: $e\n$stack');
       rethrow;
     }
   }

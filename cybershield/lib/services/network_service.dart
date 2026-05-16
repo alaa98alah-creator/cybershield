@@ -19,8 +19,6 @@ class NetworkService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'cf-access-client-id': ApiConstants.cfAccessClientId,
-          'cf-access-client-secret': ApiConstants.cfAccessClientSecret,
         },
       ),
     );

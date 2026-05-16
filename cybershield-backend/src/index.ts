@@ -15,11 +15,10 @@ app.use('*', logger())
 app.use(
   '*',
   cors({
-    origin: ['*'],
-    allowMethods: ['GET', 'POST', 'OPTIONS'],
+    origin: '*',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
     maxAge: 600,
-    credentials: true,
   }),
 )
 

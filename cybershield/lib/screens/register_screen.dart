@@ -58,7 +58,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       'last_name': _lastNameController.text.trim(),
       'username': _usernameController.text.trim(),
       'email': _emailController.text.trim(),
-      'phone_number': _phoneController.text.trim(),
+      'phone': _phoneController.text.trim(),
       'gender': _selectedGender,
       'date_of_birth': _selectedDateOfBirth!.toIso8601String().split('T').first,
       'residence': _residenceController.text.trim(),

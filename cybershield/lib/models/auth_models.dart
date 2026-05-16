@@ -35,7 +35,7 @@ class RegisterRequest {
     'last_name': lastName,
     'username': username,
     'email': email,
-    'phone_number': phoneNumber,
+    'phone': phoneNumber,
     'gender': gender,
     'date_of_birth': dateOfBirth,
     'residence': residence,
@@ -56,9 +56,9 @@ class AuthResponse {
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
-      token: json['token'] as String,
-      userId: json['user_id'] as String,
-      email: json['email'] as String,
+      token: json['token'].toString(),
+      userId: json['user_id'].toString(),
+      email: json['email'].toString(),
     );
   }
 }
